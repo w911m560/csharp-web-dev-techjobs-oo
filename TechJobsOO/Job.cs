@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+
+
 namespace TechJobsOO
 {
     public class Job
@@ -42,7 +46,27 @@ namespace TechJobsOO
 
         public override string ToString()
         {
-            return "\nID: " + this.Id + "\nName: " + this.Name + "\nEmployer: " + this.EmployerName + "\nLocation: " + this.EmployerLocation + "\nPosition Type: " + this.JobType + "\nCore Competency: " + this.JobCoreCompetency + "\n";
+            //TODO: find a solution that does not involve .Replace
+            FieldInfo[] fields = GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
+            List<string> holderList = new List<string>();
+            foreach (var field in fields)
+            {
+                if ($"{field.GetValue(this)}" == (""))
+                {
+                    holderList.Add((field.Name + ": " + "Data not available"));
+                }
+                else
+                {
+                    holderList.Add((field.Name + ": " + field.GetValue(this))); 
+                }
+                
+            }
+
+            string __return = ("\n" + string.Join("\n", holderList) + "\n").Replace("k__BackingField", "").Replace("<", "").Replace(">",""); 
+            return __return;
+            
+            //Brute force partial solution:
+            //return "\nID: " + this.Id + "\nName: " + this.Name + "\nEmployer: " + this.EmployerName + "\nLocation: " + this.EmployerLocation + "\nPosition Type: " + this.JobType + "\nCore Competency: " + this.JobCoreCompetency + "\n";
         }
 
     }
