@@ -34,7 +34,9 @@ namespace TechJobsTests
         {
             Job job4 = new Job("Product tester", new Employer("ACME"), new Location("Desert"), new PositionType("Quality control"), new CoreCompetency("Persistence"));
             string test = job4.ToString();
-            Assert.IsFalse(test.Length == test.Trim().Length);
+            Assert.IsTrue(test.IndexOf('\n') == 0);
+            string testWithoutFrontLineBreak = test.TrimStart();
+            Assert.IsFalse(testWithoutFrontLineBreak == testWithoutFrontLineBreak.TrimEnd());
         }
 
         //Finish the TDD for ToString()
